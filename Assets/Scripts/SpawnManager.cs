@@ -6,21 +6,34 @@ public class SpawnManager : MonoBehaviour
 {
 
     [SerializeField] private GameObject _enemy, _enemyContainer;
-    Coroutine spawning;
+    [SerializeField] private GameObject[] powerups;
+    Coroutine spawningEnemy, spawningPowerUps;
     private bool keepSpawning = true;
     void Start()
     {
-        spawning = StartCoroutine(SpawnRoutine());
+        spawningEnemy = StartCoroutine(SpawnRoutineEnemy());
+        spawningPowerUps = StartCoroutine(spawnPowerUps());
     }
 
-    IEnumerator SpawnRoutine()
+    IEnumerator SpawnRoutineEnemy()
     {
         while (keepSpawning)
         {
             
             GameObject newEnemy = Instantiate(_enemy, new Vector3(Random.Range(-9,9),9,0), Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(2f);
+        }
+    }
+
+    IEnumerator spawnPowerUps()
+    {
+
+        while (keepSpawning)
+        {
+
+            GameObject tripleShot = Instantiate(powerups[Random.Range(0,3)], new Vector3(Random.Range(-9, 9), 9, 0), Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(3,7));
         }
     }
 

@@ -13,7 +13,7 @@ public class EnemyBehav : MonoBehaviour
             transform.position = new Vector3(Random.Range(-9,9), 9, 0);
         }
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
 
         if (other.tag == "Player")
@@ -29,7 +29,6 @@ public class EnemyBehav : MonoBehaviour
         }
         if (other.tag == "Projectile")
         {
-            Debug.Log("Projectile");
             Destroy(other.gameObject);
             Destroy(this.gameObject);
         }
