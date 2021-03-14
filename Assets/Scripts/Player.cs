@@ -40,29 +40,48 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float _speed = 10f;// _fireRate = 0.2f, _nextFire = -0.2f;
     [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield;
-    private int _lives = 5;
+    private int _lives = 3, _shieldHits= 2;
     Coroutine firingCoroutine;
     private bool _alternativeFire;
-    private bool _normalFire;
     //powerup mechanics
     private bool _tripleShotEnabled = false, _speedBoost = false, _shield = false;
     public float _tripleShotDuration = 5f, speedBoostAmount = 10f;
     //SpawnManager mechanics
     private SpawnManager _spawnManager;
 
+    //Score Mechanics
+    [SerializeField] private int _score;
+    private UIManager _UIManager;
+
     void Start()
     {
-        _playerShield.SetActive(false);
+
+        SetDefaults();
         WeaponTyping();
+    }
 
-        //Setting Player Pos to 0,0,0
+    private void SetDefaults()
+    {
+
+
+        _score = 0;
+        _playerShield.SetActive(false);
         transform.position = new Vector3(0, 0, 0);
-
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+
+        _UIManager = GameObject.Find("UIManagerCanvas").GetComponent<UIManager>();
+        _UIManager.CurrentLives(_lives);
+        _UIManager.AddScore(_score);
         if (_spawnManager == null)
         {
             Debug.LogError("Spawn Manager is missing");
         }
+        if (_UIManager == null)
+        {
+
+            Debug.LogError("Score Board is missing");
+        }
+
     }
 
     private void WeaponTyping()
@@ -182,17 +201,24 @@ public class Player : MonoBehaviour
 
         if (_shield)
         {
-            _shield = false;
-            _playerShield.SetActive(false);
-            return;
+            _shieldHits--;
+            _playerShield.GetComponent<SpriteRenderer>().color = Color.red;
+            if (_shieldHits < 1)
+            {
+                _shield = false;
+                _playerShield.SetActive(false);
+            }
+                return;
         }
         else
         {
             _lives--;
+            _UIManager.CurrentLives(_lives);
             Debug.Log("Lives Left: " + _lives);
             if (_lives < 1)
             {
                 DestroySelf();
+                _UIManager.GameOver();
             }
         }
 
@@ -230,14 +256,19 @@ public class Player : MonoBehaviour
 
     public void EnableShield()
     {
-
+        _shieldHits = 2;
+        _playerShield.GetComponent<SpriteRenderer>().color = Color.white ;
         _playerShield.SetActive(true);
         _shield = true;
     }
 
-    
+    public void AddScore(int scorePoints)
+    {
+        _score += scorePoints;
+        _UIManager.AddScore(_score);
+    }
 
-
+   
 
 
 }

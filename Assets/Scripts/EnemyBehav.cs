@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class EnemyBehav : MonoBehaviour
 {
+    private Player _player;
+    [SerializeField] private int _scoreValue;
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
 
     void Update()
     {
@@ -29,6 +35,8 @@ public class EnemyBehav : MonoBehaviour
         }
         if (other.tag == "Projectile")
         {
+
+            _player.AddScore(_scoreValue);
             Destroy(other.gameObject);
             Destroy(this.gameObject);
         }

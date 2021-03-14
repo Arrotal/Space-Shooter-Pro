@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
 
-    [SerializeField] private GameObject _enemy, _enemyContainer;
+    [SerializeField] private GameObject _enemy, spawningContainer;
     [SerializeField] private GameObject[] powerups;
     Coroutine spawningEnemy, spawningPowerUps;
     private bool keepSpawning = true;
@@ -21,7 +21,7 @@ public class SpawnManager : MonoBehaviour
         {
             
             GameObject newEnemy = Instantiate(_enemy, new Vector3(Random.Range(-9,9),9,0), Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
+            newEnemy.transform.parent = spawningContainer.transform;
             yield return new WaitForSeconds(2f);
         }
     }
@@ -32,7 +32,8 @@ public class SpawnManager : MonoBehaviour
         while (keepSpawning)
         {
 
-            GameObject tripleShot = Instantiate(powerups[Random.Range(0,3)], new Vector3(Random.Range(-9, 9), 9, 0), Quaternion.identity);
+            GameObject powerUp = Instantiate(powerups[Random.Range(0,3)], new Vector3(Random.Range(-9, 9), 9, 0), Quaternion.identity);
+            powerUp.transform.parent = spawningContainer.transform;
             yield return new WaitForSeconds(Random.Range(3,7));
         }
     }
@@ -40,6 +41,7 @@ public class SpawnManager : MonoBehaviour
     public void onPlayerDeath()
     {
         keepSpawning = false;
+        Destroy(spawningContainer);
     }
 
 }
