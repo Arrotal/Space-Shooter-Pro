@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 10f;// _fireRate = 0.2f, _nextFire = -0.2f;
     [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield;
     [SerializeField] private GameObject[] _fires;
-    private int _lives = 3, _shieldHits= 2;
+    private int _lives = 3, _shieldHits= 3;
     Coroutine firingCoroutine;
     private bool _alternativeFire;
     [SerializeField] private AudioClip _laser;
@@ -225,8 +225,15 @@ public class Player : MonoBehaviour
         if (_shield)
         {
             _shieldHits--;
-            _playerShield.GetComponent<SpriteRenderer>().color = Color.red;
-            if (_shieldHits < 1)
+            if (_shieldHits == 2)
+            {
+                _playerShield.GetComponent<SpriteRenderer>().color = Color.green;
+            }
+            if (_shieldHits == 1)
+            {
+                _playerShield.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+                if (_shieldHits < 1)
             {
                 _shield = false;
                 _playerShield.SetActive(false);
@@ -296,7 +303,7 @@ public class Player : MonoBehaviour
 
     public void EnableShield()
     {
-        _shieldHits = 2;
+        _shieldHits = 3;
         _playerShield.GetComponent<SpriteRenderer>().color = Color.white ;
         _playerShield.SetActive(true);
         _shield = true;
