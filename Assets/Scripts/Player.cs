@@ -161,6 +161,7 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_tripleShotProjectile, transform.position, Quaternion.identity);
                 yield return new WaitForSeconds(0.1f);
+                _audioSource.Play();
             }
             else if (_alternativeFire)
             {
@@ -296,8 +297,14 @@ public class Player : MonoBehaviour
         _UIManager.AddScore(_score);
     }
 
-    
-   
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "EnemyProjectile")
+        {
+            TakeLives();
+        }
+    }
 
 
 }

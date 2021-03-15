@@ -12,11 +12,12 @@ public class EnemyBehav : MonoBehaviour
     private bool death = false;
     private AudioSource _audioSource;
     private SpawnManager _spawnManager;
-
+    [SerializeField] private GameObject _laser;
     [SerializeField] private AudioClip _explosion;
     private void Start()
     {
         SetupEnemy();
+        StartCoroutine(FiringLaser());
     }
 
     private void SetupEnemy()
@@ -96,5 +97,12 @@ public class EnemyBehav : MonoBehaviour
             _spawnManager.SpawnExtraPowerUp();
         }
     }
-
+    IEnumerator FiringLaser()
+    {
+        while (true)
+        {
+            Instantiate(_laser, transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(3,8));
+        }
+    }
 }
