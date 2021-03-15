@@ -337,6 +337,12 @@ public class Player : MonoBehaviour
             TakeLives();
         }
     }
+    public void AmmoRefill()
+    {
+        _ammo += 15;
 
-    
+        _UIManager.AmmoCount(_ammo);
+    }
+
+
 }

@@ -17,7 +17,15 @@ public class TripleShotPowerUp : MonoBehaviour
     [SerializeField]private AudioClip _audio;
     private void Update()
     {
-        transform.Translate(Vector3.down *Time.deltaTime * _speed);
+        if (powerUpID < 3)
+        {
+            transform.Translate(Vector3.down * Time.deltaTime * _speed);
+        }
+        if (powerUpID >=3)
+        {
+            transform.Rotate(0, 0, 1, Space.World);
+            transform.Translate(new Vector3(0,-1,0) * Time.deltaTime * _speed,Space.World) ;
+        }
         if (transform.position.y < -5f)
         {
             Destroy(this.gameObject);        
@@ -50,6 +58,11 @@ public class TripleShotPowerUp : MonoBehaviour
                     case 2:
                         {
                             player.EnableShield();
+                            break;
+                        }
+                    case 3:
+                        {
+                            player.AmmoRefill();
                             break;
                         }
                     
