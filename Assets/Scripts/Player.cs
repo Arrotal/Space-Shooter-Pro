@@ -136,8 +136,17 @@ public class Player : MonoBehaviour
         MovementController();
         WeaponTyping();
         Fire();
-
+        SpeedBoostCheck();
     }
+
+    private void SpeedBoostCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        { _speed = 15f; }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        { _speed = 10f; }
+    }
+
     private void Fire()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -187,7 +196,9 @@ public class Player : MonoBehaviour
         _VerticalInput = Input.GetAxis("Vertical");
         if (_speedBoost)
         { transform.Translate(new Vector3(_horizontalInput, _VerticalInput, 0) * Time.deltaTime * (speedBoostAmount + _speed)); }
-        else { transform.Translate(new Vector3(_horizontalInput, _VerticalInput, 0) * Time.deltaTime * _speed); }
+        
+        else
+        { transform.Translate(new Vector3(_horizontalInput, _VerticalInput, 0) * Time.deltaTime * _speed); }
         
 
         //Limit the Top and Bottom Movement
