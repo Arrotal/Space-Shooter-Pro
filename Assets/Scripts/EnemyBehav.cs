@@ -18,6 +18,7 @@ public class EnemyBehav : MonoBehaviour
     {
         SetupEnemy();
         StartCoroutine(FiringLaser());
+        
     }
 
     private void SetupEnemy()
@@ -70,6 +71,7 @@ public class EnemyBehav : MonoBehaviour
             _animator.SetTrigger("OnDeath");
             Destroy(this.gameObject, 2.29f);
             _collider.enabled = false;
+            transform.tag = null;
             death = true;
         }
         if (other.tag == "Projectile")
@@ -80,6 +82,7 @@ public class EnemyBehav : MonoBehaviour
             _audioSource.Play();
             Destroy(this.gameObject,2.29f);
             _collider.enabled = false;
+            transform.tag = "Untagged";
             death = true;
         }
 

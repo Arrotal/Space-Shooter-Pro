@@ -70,6 +70,11 @@ public class TripleShotPowerUp : MonoBehaviour
                             player.HealthRefill();
                             break;
                         }
+                    case 5:
+                        {
+                            player.HomingShot();
+                            break;
+                        }
 
                     default:
                         {

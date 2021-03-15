@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     private WeaponStats blasters;
 
     [SerializeField] private float _speed = 10f;// _fireRate = 0.2f, _nextFire = -0.2f;
-    [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield;
+    [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield, _HomingShots;
     [SerializeField] private GameObject[] _fires;
     private int _lives = 3, _shieldHits= 3, _ammo= 15,_fireActive;
     Coroutine firingCoroutine;
@@ -49,8 +49,8 @@ public class Player : MonoBehaviour
     private bool[] _fireBool= new bool[2];
 
     //powerup mechanics
-    [SerializeField]private bool _tripleShotEnabled = false, _speedBoost = false, _shield = false;
-    public float _tripleShotDuration = 0f, speedBoostAmount = 0f;
+    [SerializeField] private bool _tripleShotEnabled = false, _speedBoost = false, _shield = false, _HomingShotsEnabled = false;
+    public float _tripleShotDuration = 0f, speedBoostAmount = 0f, _HomingShotDuration = 0f;
     //SpawnManager mechanics
     private SpawnManager _spawnManager;
     private GameManager _gameManager;
@@ -136,6 +136,12 @@ public class Player : MonoBehaviour
 
             _tripleShotDuration -= Time.deltaTime;
         }
+        else if (_HomingShotsEnabled)
+        {
+            blasters = new WeaponStats("Homing Shots", 0.4f, _HomingShotDuration);
+            _HomingShotDuration -= _HomingShotDuration;
+
+        }
     }
     void Update()
     {
@@ -176,6 +182,12 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_tripleShotProjectile, transform.position, Quaternion.identity);
                 yield return new WaitForSeconds(0.1f);
+                _audioSource.Play();
+            }
+            else if (_HomingShotsEnabled)
+            {
+                Instantiate(_HomingShots, transform.position  , Quaternion.identity);
+                yield return new WaitForSeconds(0.3f);
                 _audioSource.Play();
             }
             else if (_alternativeFire)
@@ -379,5 +391,21 @@ public class Player : MonoBehaviour
             AddScore(100);
         }
     }
+    public void HomingShot()
+    {
+        StopCoroutine("HomingShotPowerDown");
+        _HomingShotsEnabled = true;
+        _HomingShotDuration += 5f;
+        StartCoroutine("HomingShotPowerDown");
 
+    }
+    IEnumerator HomingShotPowerDown()
+    {
+        while (true)
+        {
+
+            yield return new WaitForSeconds(_HomingShotDuration);
+            _HomingShotsEnabled = false;
+        }
+    }
 }
