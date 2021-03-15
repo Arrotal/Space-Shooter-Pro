@@ -5,6 +5,7 @@ using UnityEngine;
 public class LaserBehav : MonoBehaviour
 {
    [SerializeField] private float speed = 17f;
+
     void Update()
     {
         transform.Translate(Vector3.up * speed * Time.deltaTime);

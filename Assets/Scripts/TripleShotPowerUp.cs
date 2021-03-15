@@ -11,7 +11,7 @@ public class TripleShotPowerUp : MonoBehaviour
     //1=Speed
     //2=Shields
     [SerializeField] private int powerUpID;
-
+    [SerializeField]private AudioClip _audio;
     private void Update()
     {
         transform.Translate(Vector3.down *Time.deltaTime * _speed);
@@ -55,7 +55,7 @@ public class TripleShotPowerUp : MonoBehaviour
                                 break;
                         }
                 }
-                
+                AudioSource.PlayClipAtPoint(_audio, transform.position);
                 Destroy(this.gameObject);
             }
         }

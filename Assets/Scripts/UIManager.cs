@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _GameUIContainer.SetActive(true);
+        _gameOverContainer.SetActive(false);
         _scoreText.text = _scoreValue.ToString();
     }
 
@@ -30,6 +31,14 @@ public class UIManager : MonoBehaviour
     {
         _GameUIContainer.SetActive(false);
         _gameOverScore.text = _scoreValue.ToString();
-        _gameOverContainer.SetActive(true);
+        StartCoroutine(GameOverFlickerRoutine());
+    }
+    IEnumerator GameOverFlickerRoutine()
+    {
+        while (true)
+        {
+            _gameOverContainer.SetActive(!_gameOverContainer.activeSelf);
+            yield return new WaitForSeconds(.4f);
+        }
     }
 }
