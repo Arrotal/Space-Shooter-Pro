@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _gameOverContainer, _GameUIContainer;
-    [SerializeField] private Text _scoreText, _gameOverScore;
+    [SerializeField] private Text _scoreText, _gameOverScore, _ammoAmount;
     [SerializeField] private Sprite[] _lives;
     [SerializeField] private Image _livesVisual;
     private int _scoreValue;
@@ -40,5 +40,11 @@ public class UIManager : MonoBehaviour
             _gameOverContainer.SetActive(!_gameOverContainer.activeSelf);
             yield return new WaitForSeconds(.4f);
         }
+    }
+
+
+    public void AmmoCount(int ammoIncoming)
+    {
+        _ammoAmount.text = ammoIncoming.ToString();
     }
 }

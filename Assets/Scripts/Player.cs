@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 10f;// _fireRate = 0.2f, _nextFire = -0.2f;
     [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield;
     [SerializeField] private GameObject[] _fires;
-    private int _lives = 3, _shieldHits= 3;
+    private int _lives = 3, _shieldHits= 3, _ammo= 15;
     Coroutine firingCoroutine;
     private bool _alternativeFire;
     [SerializeField] private AudioClip _laser;
@@ -69,7 +69,6 @@ public class Player : MonoBehaviour
     private void SetDefaults()
     {
 
-
         _score = 0;
         _playerShield.SetActive(false);
         transform.position = new Vector3(0, 0, 0);
@@ -86,6 +85,8 @@ public class Player : MonoBehaviour
             fire.SetActive(false);
         }
         CheckForNulls();
+
+        _UIManager.AmmoCount(_ammo);
         _audioSource.clip = _laser;
     }
 
@@ -146,7 +147,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.LeftShift))
         { _speed = 10f; }
     }
-
+    
     private void Fire()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -174,18 +175,31 @@ public class Player : MonoBehaviour
             }
             else if (_alternativeFire)
             {
-                Instantiate(_projectile, transform.position + new Vector3(-0.1f, 0.7f, 0), Quaternion.identity);
-                _alternativeFire = false;
-                _audioSource.Play();
-                yield return new WaitForSeconds(0.05f);
-               
+                if (_ammo != 0)
+                {
+                    Instantiate(_projectile, transform.position + new Vector3(-0.1f, 0.7f, 0), Quaternion.identity);
+                    _alternativeFire = false;
+                    _audioSource.Play();
+                    _ammo--;
+
+                    _UIManager.AmmoCount(_ammo);
+                }
+
+                yield return new WaitForSeconds(0.5f);
             }
             else if (!_alternativeFire)
             {
-                Instantiate(_projectile, transform.position + new Vector3(0.1f, 0.7f, 0), Quaternion.identity);
-                _alternativeFire = true;
-                _audioSource.Play();
-                yield return new WaitForSeconds(0.05f);
+                if (_ammo != 0)
+                {
+                    Instantiate(_projectile, transform.position + new Vector3(0.1f, 0.7f, 0), Quaternion.identity);
+                    _alternativeFire = true;
+                    _audioSource.Play();
+                    _ammo--;
+
+                    _UIManager.AmmoCount(_ammo);
+                }
+
+                yield return new WaitForSeconds(0.5f);
             }
             
         }
@@ -324,5 +338,5 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    
 }

@@ -10,6 +10,9 @@ public class TripleShotPowerUp : MonoBehaviour
     //0=TripleShot
     //1=Speed
     //2=Shields
+    //3=AmmoRefill
+    //4=HealthRefill
+    //5=
     [SerializeField] private int powerUpID;
     [SerializeField]private AudioClip _audio;
     private void Update()
@@ -49,6 +52,7 @@ public class TripleShotPowerUp : MonoBehaviour
                             player.EnableShield();
                             break;
                         }
+                    
                     default:
                         {
                             Debug.Log("Outside PowerUpID parameters");
