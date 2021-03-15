@@ -65,7 +65,12 @@ public class TripleShotPowerUp : MonoBehaviour
                             player.AmmoRefill();
                             break;
                         }
-                    
+                    case 4:
+                        {
+                            player.HealthRefill();
+                            break;
+                        }
+
                     default:
                         {
                             Debug.Log("Outside PowerUpID parameters");

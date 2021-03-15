@@ -41,11 +41,12 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 10f;// _fireRate = 0.2f, _nextFire = -0.2f;
     [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield;
     [SerializeField] private GameObject[] _fires;
-    private int _lives = 3, _shieldHits= 3, _ammo= 15;
+    private int _lives = 3, _shieldHits= 3, _ammo= 15,_fireActive;
     Coroutine firingCoroutine;
     private bool _alternativeFire;
     [SerializeField] private AudioClip _laser;
     private AudioSource _audioSource;
+    private bool[] _fireBool= new bool[2];
 
     //powerup mechanics
     [SerializeField]private bool _tripleShotEnabled = false, _speedBoost = false, _shield = false;
@@ -72,7 +73,11 @@ public class Player : MonoBehaviour
         _score = 0;
         _playerShield.SetActive(false);
         transform.position = new Vector3(0, 0, 0);
-
+        for (int x=0; x<_fireBool.Length; x++)
+        {
+            _fireBool[x]= false;
+        }
+        
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _UIManager = GameObject.Find("UIManagerCanvas").GetComponent<UIManager>();
@@ -259,12 +264,14 @@ public class Player : MonoBehaviour
             _lives--;
             _UIManager.CurrentLives(_lives);
             if (_fires[0].activeSelf)
-            { _fires[1].SetActive(true); }
+            { _fires[1].SetActive(true); _fireBool[1] = true; }
             else if (_fires[1].activeSelf)
-            { _fires[0].SetActive(true); }
+            { _fires[0].SetActive(true); _fireBool[0] = true; }
             else
             {
-                _fires[UnityEngine.Random.Range(0, _fires.Length)].SetActive(true);
+                _fireActive = UnityEngine.Random.Range(0, _fires.Length);
+                _fireBool[_fireActive] = true ;
+                _fires[_fireActive].SetActive(true);
             }
             if (_lives < 1)
             {
@@ -344,5 +351,33 @@ public class Player : MonoBehaviour
         _UIManager.AmmoCount(_ammo);
     }
 
+    public void HealthRefill()
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            if (_fireBool[0] && _fireBool[1])
+            { _fireActive = UnityEngine.Random.Range(0, 1);
+                _fires[_fireActive].SetActive(false);
+                _fireBool[_fireActive] = false;
+            }
+            else if (_fireBool[0])
+            {
+                _fires[0].SetActive(false);
+                _fireBool[0] = false;
+            }
+            else if (_fireBool[1])
+            {
+                _fires[1].SetActive(false);
+                _fireBool[1] = false;
+            }
+
+            _UIManager.CurrentLives(_lives);
+        }
+        else
+        {
+            AddScore(100);
+        }
+    }
 
 }
