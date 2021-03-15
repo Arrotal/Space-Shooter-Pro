@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class LaserBehav : MonoBehaviour
 {
-   [SerializeField] private float speed = 15f;
+   [SerializeField] private float speed = 17f;
+
     void Update()
     {
         transform.Translate(Vector3.up * speed * Time.deltaTime);
         if (transform.position.y > 8)
-        { 
+        {
+            if (transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
+            }
         Destroy(this.gameObject);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Laser Hit " + other.transform.name);
-    }
+    
 }
