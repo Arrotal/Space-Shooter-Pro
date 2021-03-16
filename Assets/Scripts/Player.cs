@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
 {
     //PlayerMovement Stuff
     private float _horizontalInput, _VerticalInput, _yMax = 2f, _yMin = -3f, _xMax = 11f, _xMin = -11f;
+    private bool _speedBoosting;
 
     //fire Mechanics
     private WeaponStats blasters;
@@ -42,7 +43,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield, _HomingShots;
     [SerializeField] private GameObject[] _fires;
     private int _lives = 3, _shieldHits= 3, _ammo= 15,_fireActive;
-    Coroutine firingCoroutine;
+    private Coroutine _firingCoroutine;
     private bool _alternativeFire;
     [SerializeField] private AudioClip _laser;
     private AudioSource _audioSource;
@@ -50,7 +51,7 @@ public class Player : MonoBehaviour
 
     //powerup mechanics
     [SerializeField] private bool _tripleShotEnabled = false, _speedBoost = false, _shield = false, _HomingShotsEnabled = false;
-    public float _tripleShotDuration = 0f, speedBoostAmount = 0f, _HomingShotDuration = 0f;
+    public float _tripleShotDuration = 0f, speedBoostAmount = 0f, _HomingShotDuration = 0f, _speedBoostDuration = 0f, _speedBoostCoolDown = 0f;
     //SpawnManager mechanics
     private SpawnManager _spawnManager;
     private GameManager _gameManager;
@@ -69,8 +70,10 @@ public class Player : MonoBehaviour
 
     private void SetDefaults()
     {
-
+        _speedBoosting = false;
         _score = 0;
+        _speedBoostDuration = 10f;
+        _speedBoostCoolDown = 0f;
         _playerShield.SetActive(false);
         transform.position = new Vector3(0, 0, 0);
         for (int x=0; x<_fireBool.Length; x++)
@@ -84,7 +87,8 @@ public class Player : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _UIManager.CurrentLives(_lives);
         _UIManager.AddScore(_score);
-
+        _UIManager.SpeedBoostDuration(_speedBoostDuration);
+        _UIManager.SpeedBoostOnCooldown(false);
         foreach (GameObject fire in _fires)
         {
             fire.SetActive(false);
@@ -148,27 +152,87 @@ public class Player : MonoBehaviour
         MovementController();
         WeaponTyping();
         Fire();
+        SpeedBoost();
+    }
+
+    private void SpeedBoost()
+    {
+        SpeedBoostCooldowns();
         SpeedBoostCheck();
+        
+    }
+
+    private void SpeedBoostCooldowns()
+    {
+        if (_speedBoosting)
+        {
+            _speedBoostDuration -= Time.deltaTime;
+            _UIManager.SpeedBoostDuration(_speedBoostDuration);
+        }
+        if (_speedBoostCoolDown > 0)
+        {
+            _speedBoostCoolDown -= Time.deltaTime;
+
+            _speedBoostDuration += Time.deltaTime;
+            _UIManager.SpeedBoostDuration(_speedBoostDuration);
+            if (_speedBoostCoolDown < 0)
+            {
+                _speedBoostCoolDown = 0;
+                _speedBoostDuration = 10f;
+                _UIManager.SpeedBoostOnCooldown(false);
+            }
+        }
+        if (!_speedBoosting && _speedBoostCoolDown == 0 && _speedBoostDuration<10f)
+        {
+            _speedBoostDuration += Time.deltaTime;
+
+            if (_speedBoostDuration > 10f)
+            {
+                _speedBoostDuration = 10f;
+            }
+            _UIManager.SpeedBoostDuration(_speedBoostDuration);
+        }
+
     }
 
     private void SpeedBoostCheck()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        { _speed = 15f; }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        { _speed = 10f; }
+        if (_speedBoostCoolDown ==0)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftShift) )
+            {
+                StartCoroutine("SpeedBoostCooldown");
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            { _speed = 10f;
+                StopCoroutine("SpeedBoostCooldown");
+                _speedBoosting = false;
+            }
+        }
+    }
+    IEnumerator SpeedBoostCooldown()
+    {
+        _speedBoosting = true;
+        _speed = 15f;
+        
+        yield return new WaitForSeconds(_speedBoostDuration);
+
+        _UIManager.SpeedBoostOnCooldown(true);
+        _speed = 10f;
+        _speedBoostCoolDown = 10f;
+        _speedBoosting = false;
     }
     
     private void Fire()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            firingCoroutine = StartCoroutine(FireContinously());
+            _firingCoroutine = StartCoroutine(FireContinously());
 
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            StopCoroutine(firingCoroutine);
+            StopCoroutine(_firingCoroutine);
         }
 
     }

@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text _scoreText, _gameOverScore, _ammoAmount;
     [SerializeField] private Sprite[] _lives;
     [SerializeField] private Image _livesVisual;
+    [SerializeField] private Slider _speedBoost;
+    [SerializeField] private Image _speedColour;
     private int _scoreValue;
     void Start()
     {
@@ -47,4 +49,22 @@ public class UIManager : MonoBehaviour
     {
         _ammoAmount.text = ammoIncoming.ToString();
     }
+
+    public void SpeedBoostDuration(float SpeedBoost)
+    {
+        _speedBoost.value = SpeedBoost;
+    }
+
+    public void SpeedBoostOnCooldown(bool isIt)
+    {
+        if (isIt)
+        {
+            _speedColour.color = Color.gray;
+        }
+        if (!isIt)
+        {
+            _speedColour.color = Color.green;
+        }
+    
+    }    
 }
