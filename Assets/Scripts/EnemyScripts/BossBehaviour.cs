@@ -12,7 +12,7 @@ public class BossBehaviour : MonoBehaviour
     private bool _death = false, _firingBigLaser;
     private AudioSource _audioSource;
     private SpawnManager _spawnManager;
-    [SerializeField] private GameObject _laser,_shield,_bigLaser;
+    [SerializeField] private GameObject _laser,_shield,_bigLaser, _thruster;
     [SerializeField] private AudioClip _explosion;
     private UIManager _UIManager;
     private BossMovement _bossMovement;
@@ -118,6 +118,8 @@ public class BossBehaviour : MonoBehaviour
                 Destroy(this.gameObject, 2.29f);
                 _collider.enabled = false;
                 transform.tag = "Untagged";
+            _shield.SetActive(false);
+            _thruster.SetActive(false) ;
             _spawnManager.StartSpawning();
                 _death = true;
             _UIManager.BossStatus(false);

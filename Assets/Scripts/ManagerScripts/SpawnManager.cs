@@ -21,7 +21,7 @@ public class SpawnManager : MonoBehaviour
     {
         while (!_bossDead)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(30f);
 
             StartCoroutine(BossTime(_Boss));
         }

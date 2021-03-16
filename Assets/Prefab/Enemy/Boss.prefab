@@ -268,6 +268,7 @@ MonoBehaviour:
   _laser: {fileID: 1987441584904006718, guid: e291667d695aa3a439fd9cef0ec4f220, type: 3}
   _shield: {fileID: 9037366005951627937}
   _bigLaser: {fileID: 1137889353531297761, guid: b4cd13b085160864a962fb309362e783, type: 3}
+  _thruster: {fileID: 9037366007264939679}
   _explosion: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _waypoints: {fileID: 4461917645667909217, guid: bb42f0e851cc7b340973ddebd9d726e6, type: 3}
   _health: 1
