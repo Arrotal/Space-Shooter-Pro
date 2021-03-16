@@ -12,20 +12,20 @@ public class EnemyBehav : MonoBehaviour
     private bool death = false;
     private AudioSource _audioSource;
     private SpawnManager _spawnManager;
-    [SerializeField] private GameObject _laser,_laserUP;
+    [SerializeField] private GameObject _laser,_laserUP,_shield;
     [SerializeField] private AudioClip _explosion;
+    [SerializeField] private int _health;
 
-    [SerializeField]private GameObject _waypoints;
-    private int _waypointIndex = 0;
     private void Start()
     {
         SetupEnemy();
         StartCoroutine(FiringLaser());
-        _waypointIndex = 0;
     }
 
     private void SetupEnemy()
     {
+        if (_health == 2)
+        { _shield.SetActive(true); }
         _speed = Random.Range(2, 5);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _animator = GetComponent<Animator>();
@@ -60,55 +60,62 @@ public class EnemyBehav : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        if (other.tag == "Player")
+        if (other.tag == "Projectile" && _health > 1)
+        { _shield.SetActive(false);
+            _health--;
+        }
+        else if (_health <= 1 || _shield ==null ||other.tag == "Player"||other.tag =="BossLaser")
         {
-            Player player = other.transform.GetComponent<Player>();
-            if (player != null)
+            if (other.tag == "Player")
             {
-                player.TakeLives();
-               
+                Player player = other.transform.GetComponent<Player>();
+                if (player != null)
+                {
+                    player.TakeLives();
+
+                }
+                _audioSource.Play();
+                _animator.SetTrigger("OnDeath");
+                Destroy(this.gameObject, 2.29f);
+                _collider.enabled = false;
+                transform.tag = "Untagged";
+                death = true;
             }
-            _audioSource.Play();
-            _animator.SetTrigger("OnDeath");
-            Destroy(this.gameObject, 2.29f);
-            _collider.enabled = false;
-            transform.tag = "Untagged";
-            death = true;
-        }
-        if (other.tag == "Projectile")
-        {
-            _animator.SetTrigger("OnDeath");
-            _player.AddScore(_scoreValue);
-            Destroy(other.gameObject);
-            _audioSource.Play();
-            Destroy(this.gameObject,2.29f);
-            _collider.enabled = false;
-            transform.tag = "Untagged";
-            death = true;
-        }
+            if (other.tag == "Projectile")
+            {
+                
+                _animator.SetTrigger("OnDeath");
+                _player.AddScore(_scoreValue);
+                Destroy(other.gameObject);
+                _audioSource.Play();
+                Destroy(this.gameObject, 2.29f);
+                _collider.enabled = false;
+                transform.tag = "Untagged";
+                death = true;
+            }
 
-        if (other.tag == "Enemy" && transform.position.y>7.5)
-        {
-            Destroy(this.gameObject);
-            _spawnManager.SpawnExtraEnemy();
-        }
+            if (other.tag == "Enemy" && transform.position.y > 7.5)
+            {
+                Destroy(this.gameObject);
+                _spawnManager.SpawnExtraEnemy();
+            }
 
-        if (other.tag == "PowerUp" && transform.position.y > 7.5)
+            if (other.tag == "PowerUp" && transform.position.y > 7.5)
 
-        {
-            Destroy(this.gameObject);
-            _spawnManager.SpawnExtraEnemy();
-            _spawnManager.SpawnExtraPowerUp();
-        }
-        if (other.tag == "BossLaser")
-        {
-            _animator.SetTrigger("OnDeath");
-            _audioSource.Play();
-            Destroy(this.gameObject, 2.29f);
-            _collider.enabled = false;
-            transform.tag = "Untagged";
-            death = true;
+            {
+                Destroy(this.gameObject);
+                _spawnManager.SpawnExtraEnemy();
+                _spawnManager.SpawnExtraPowerUp();
+            }
+            if (other.tag == "BossLaser")
+            {
+                _animator.SetTrigger("OnDeath");
+                _audioSource.Play();
+                Destroy(this.gameObject, 2.29f);
+                _collider.enabled = false;
+                transform.tag = "Untagged";
+                death = true;
+            }
         }
     }
     IEnumerator FiringLaser()
@@ -126,7 +133,7 @@ public class EnemyBehav : MonoBehaviour
 
                 Instantiate(_laser, transform.position, Quaternion.identity);
                 }
-            yield return new WaitForSeconds(Random.Range(0,2));
+            yield return new WaitForSeconds(Random.Range(2,7));
 
         }
 
