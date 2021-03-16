@@ -32,6 +32,10 @@ public class WeaponStats
 
 public class Player : MonoBehaviour
 {
+    //Player Camera
+    [SerializeField] private Camera _mainCamera;
+    private bool _cameraShaking;
+
     //PlayerMovement Stuff
     private float _horizontalInput, _VerticalInput, _yMax = 2f, _yMin = -3f, _xMax = 11f, _xMin = -11f;
     private bool _speedBoosting;
@@ -70,6 +74,7 @@ public class Player : MonoBehaviour
 
     private void SetDefaults()
     {
+        _cameraShaking = false;
         _speedBoosting = false;
         _score = 0;
         _speedBoostDuration = 10f;
@@ -316,7 +321,9 @@ public class Player : MonoBehaviour
     }
     public void TakeLives()
     {
-
+        //CameraShake
+        _cameraShaking = true;
+        StartCoroutine(CameraShake());
         if (_shield)
         {
             _shieldHits--;
@@ -359,6 +366,19 @@ public class Player : MonoBehaviour
         }
         }
 
+    }
+
+    IEnumerator CameraShake()
+    {
+        while (_cameraShaking)
+        {
+            _mainCamera.transform.position = new Vector3(0.2f,1,-10);
+            yield return new WaitForSeconds(0.5f);
+
+
+            _mainCamera.transform.position = new Vector3(0, 1, -10);
+            _cameraShaking = false;
+        } 
     }
     private void DestroySelf()
     {

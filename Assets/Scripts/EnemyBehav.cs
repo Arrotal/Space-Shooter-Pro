@@ -71,7 +71,7 @@ public class EnemyBehav : MonoBehaviour
             _animator.SetTrigger("OnDeath");
             Destroy(this.gameObject, 2.29f);
             _collider.enabled = false;
-            transform.tag = null;
+            transform.tag = "Untagged";
             death = true;
         }
         if (other.tag == "Projectile")
