@@ -6,14 +6,44 @@ public class SpawnManager : MonoBehaviour
 {
 
     [SerializeField] private List<WaveManager> _waveManagement;
+    [SerializeField] private WaveManager _Boss;
     [SerializeField] private GameObject _enemy, spawningContainer, _enemyLeft, _enemyRight;
     [SerializeField] private GameObject[] powerups;
+    [SerializeField] private int randomChance;
     Coroutine spawningEnemy, spawningPowerUps, spawningPathed, spawningRight;
-    private bool keepSpawning = false;
+    private bool keepSpawning = false, _bossDead;
     void Start()
     {
+        _bossDead = false;
     }
 
+    IEnumerator TimeUntilBoss()
+    {
+        while (!_bossDead)
+        {
+            yield return new WaitForSeconds(30f);
+
+            StartCoroutine(BossTime(_Boss));
+        }
+
+    }
+    IEnumerator BossTime(WaveManager boss)
+    {
+
+        keepSpawning = false; 
+        StopAllCoroutines();
+        StillSpawnPowerups();
+        GameObject bossEnemy = Instantiate(boss.GetEnemy(), new Vector3(0,9,0), Quaternion.identity);
+        bossEnemy.GetComponent<BossMovement>().SetWaveManager(boss);
+
+        yield return new WaitUntil(() => _bossDead );
+        StartSpawning();
+
+    }
+    private void StillSpawnPowerups()
+    {
+        StartCoroutine("spawnPowerUps");
+    }
     IEnumerator SpawnRoutineEnemy()
     {
         yield return new WaitForSeconds(2F);
@@ -33,7 +63,12 @@ public class SpawnManager : MonoBehaviour
         yield return new WaitForSeconds(2F);
         while (keepSpawning)
         {
-            if (Random.Range(0, 20) == 20)
+            randomChance = Random.Range(0, 21);
+            if(randomChance ==20)
+            { 
+                GameObject powerUp = Instantiate(powerups[6], new Vector3(Random.Range(-9, 9), 9, 0), Quaternion.identity);
+            }
+            else if (randomChance >=15)
             {
                 GameObject powerUp = Instantiate(powerups[5], new Vector3(Random.Range(-9, 9), 9, 0), Quaternion.identity);
             }
@@ -79,7 +114,14 @@ public class SpawnManager : MonoBehaviour
 
     public void StartSpawning()
     {
-
+        StartCoroutine(Wait3Seconds());
+        
+    }
+    IEnumerator Wait3Seconds()
+    {
+        yield return new WaitForSeconds(3f);
+        StartCoroutine(TimeUntilBoss());
+        _bossDead = false;
         keepSpawning = true;
         spawningEnemy = StartCoroutine(SpawnRoutineEnemy());
 
@@ -99,4 +141,6 @@ public class SpawnManager : MonoBehaviour
         powerUp.transform.parent = spawningContainer.transform;
 
     }
+   
+
 }

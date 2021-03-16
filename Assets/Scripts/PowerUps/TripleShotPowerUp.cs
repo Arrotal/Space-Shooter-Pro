@@ -12,7 +12,8 @@ public class TripleShotPowerUp : MonoBehaviour
     //2=Shields
     //3=AmmoRefill
     //4=HealthRefill
-    //5=
+    //5=HomingShot
+    //6=*Negative*Overburn
     [SerializeField] private int powerUpID;
     [SerializeField]private AudioClip _audio;
     private void Update()
@@ -36,7 +37,10 @@ public class TripleShotPowerUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        
+        if (other.tag == "BossLaser")
+        {
+            Destroy(this.gameObject);
+        }
         if (other.tag == "Player")
         {
             
@@ -67,15 +71,21 @@ public class TripleShotPowerUp : MonoBehaviour
                         }
                     case 4:
                         {
-                            player.HealthRefill();
+                            player.OverBurner();
                             break;
+                            
                         }
                     case 5:
+                        {
+                            player.HealthRefill();
+                            break;
+
+                        }
+                    case 6:
                         {
                             player.HomingShot();
                             break;
                         }
-
                     default:
                         {
                             Debug.Log("Outside PowerUpID parameters");

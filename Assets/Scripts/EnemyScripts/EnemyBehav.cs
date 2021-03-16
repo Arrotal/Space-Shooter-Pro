@@ -101,6 +101,15 @@ public class EnemyBehav : MonoBehaviour
             _spawnManager.SpawnExtraEnemy();
             _spawnManager.SpawnExtraPowerUp();
         }
+        if (other.tag == "BossLaser")
+        {
+            _animator.SetTrigger("OnDeath");
+            _audioSource.Play();
+            Destroy(this.gameObject, 2.29f);
+            _collider.enabled = false;
+            transform.tag = "Untagged";
+            death = true;
+        }
     }
     IEnumerator FiringLaser()
     {

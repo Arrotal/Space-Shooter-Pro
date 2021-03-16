@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59d57e9f488355f4cb3f2c790783b2f8, type: 3}
+  m_Name: BossWave
+  m_EditorClassIdentifier: 
+  _enemy: {fileID: 424897793766162140, guid: 9366f044e47934346952649660f8107e, type: 3}
+  _path: {fileID: 4461917645667909217, guid: bb42f0e851cc7b340973ddebd9d726e6, type: 3}
+  _numberOfEnemies: 1
+  _moveSpeed: 1

@@ -8,9 +8,9 @@ public class EnemyMovement : MonoBehaviour
     List<Transform> _waypoints;
     int waypointIndex = 0, _speed;
 
-
     private void Start()
     {
+        
         if (_waveManagement)
         {
             _speed = _waveManagement.GetmoveSpeed();

@@ -54,8 +54,8 @@ public class Player : MonoBehaviour
     private bool[] _fireBool= new bool[2];
 
     //powerup mechanics
-    [SerializeField] private bool _tripleShotEnabled = false, _speedBoost = false, _shield = false, _HomingShotsEnabled = false;
-    public float _tripleShotDuration = 0f, speedBoostAmount = 0f, _HomingShotDuration = 0f, _speedBoostDuration = 0f, _speedBoostCoolDown = 0f;
+    [SerializeField] private bool _tripleShotEnabled = false, _speedBoost = false, _shield = false, _HomingShotsEnabled = false, _booster = false;
+    public float _tripleShotDuration = 0f, _HomingShotDuration = 0f, _speedBoostDuration = 0f, _speedBoostCoolDown = 0f, _boosterDuration = 0f;
     //SpawnManager mechanics
     private SpawnManager _spawnManager;
     private GameManager _gameManager;
@@ -76,9 +76,11 @@ public class Player : MonoBehaviour
     {
         _cameraShaking = false;
         _speedBoosting = false;
+        _booster = false;
         _score = 0;
         _speedBoostDuration = 10f;
         _speedBoostCoolDown = 0f;
+        _boosterDuration = 0f;
         _playerShield.SetActive(false);
         transform.position = new Vector3(0, 0, 0);
         for (int x=0; x<_fireBool.Length; x++)
@@ -152,6 +154,10 @@ public class Player : MonoBehaviour
             _HomingShotDuration -= _HomingShotDuration;
 
         }
+        if (_booster)
+        {
+            _boosterDuration -= Time.deltaTime;
+        }
     }
     void Update()
     {
@@ -210,7 +216,7 @@ public class Player : MonoBehaviour
                 StartCoroutine("SpeedBoostCooldown");
             }
             if (Input.GetKeyUp(KeyCode.LeftShift))
-            { _speed = 10f;
+            { _speed -= 5f;
                 StopCoroutine("SpeedBoostCooldown");
                 _speedBoosting = false;
             }
@@ -219,12 +225,12 @@ public class Player : MonoBehaviour
     IEnumerator SpeedBoostCooldown()
     {
         _speedBoosting = true;
-        _speed = 15f;
+        _speed +=5f;
         
         yield return new WaitForSeconds(_speedBoostDuration);
 
         _UIManager.SpeedBoostOnCooldown(true);
-        _speed = 10f;
+        _speed -=5f;
         _speedBoostCoolDown = 10f;
         _speedBoosting = false;
     }
@@ -295,11 +301,7 @@ public class Player : MonoBehaviour
     {
         _horizontalInput = Input.GetAxis("Horizontal");
         _VerticalInput = Input.GetAxis("Vertical");
-        if (_speedBoost)
-        { transform.Translate(new Vector3(_horizontalInput, _VerticalInput, 0) * Time.deltaTime * (speedBoostAmount + _speed)); }
-        
-        else
-        { transform.Translate(new Vector3(_horizontalInput, _VerticalInput, 0) * Time.deltaTime * _speed); }
+         transform.Translate(new Vector3(_horizontalInput, _VerticalInput, 0) * Time.deltaTime * _speed); 
         
 
         //Limit the Top and Bottom Movement
@@ -357,13 +359,14 @@ public class Player : MonoBehaviour
                 _fireBool[_fireActive] = true ;
                 _fires[_fireActive].SetActive(true);
             }
-            if (_lives < 1)
+            if (_lives ==0)
             {
 
                 Instantiate(_explosion, transform.position, Quaternion.identity);
-                DestroySelf();
+
                 _UIManager.GameOver();
                 _gameManager.EndGame();
+                DestroySelf();
         }
         }
 
@@ -408,15 +411,22 @@ public class Player : MonoBehaviour
     public void EnableSpeed()
     {
         StopCoroutine("SpeedBoosterPowerDown");
-        _tripleShotEnabled = true;
-        _tripleShotDuration += 10f;
+        _booster = true;
+
+        _speed = 20f;
+        _boosterDuration += 5f;
         StartCoroutine("SpeedBoosterPowerDown");
     }
 
     IEnumerator SpeedBoosterPowerDown()
     {
-        yield return new WaitForSeconds(20f);
-        _speedBoost = false;
+        while (true)
+        {
+            yield return new WaitForSeconds(_boosterDuration);
+            _speed = 10f;
+            _booster = false;
+            _boosterDuration = 0;
+        }
     }
 
     public void EnableShield()
@@ -438,6 +448,12 @@ public class Player : MonoBehaviour
     {
         if (other.tag == "EnemyProjectile")
         {
+            TakeLives();
+        }
+        if (other.tag == "BossLaser")
+        {
+            TakeLives();
+            TakeLives();
             TakeLives();
         }
     }
@@ -497,5 +513,12 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(_HomingShotDuration);
             _HomingShotsEnabled = false;
         }
+    }
+
+    public void OverBurner()
+    {
+        _speedBoostDuration = 0f;
+        _speedBoostCoolDown = 10f;
+        _UIManager.SpeedBoostOnCooldown(true);
     }
 }
