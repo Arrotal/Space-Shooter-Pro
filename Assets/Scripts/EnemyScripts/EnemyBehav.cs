@@ -12,7 +12,7 @@ public class EnemyBehav : MonoBehaviour
     private bool death = false;
     private AudioSource _audioSource;
     private SpawnManager _spawnManager;
-    [SerializeField] private GameObject _laser;
+    [SerializeField] private GameObject _laser,_laserUP;
     [SerializeField] private AudioClip _explosion;
 
     [SerializeField]private GameObject _waypoints;
@@ -115,8 +115,20 @@ public class EnemyBehav : MonoBehaviour
     {
         while (true)
         {
-            Instantiate(_laser, transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(3,8));
+           float playerYPos = transform.position.x- _player.transform.position.x;
+    if (Mathf.Abs(playerYPos) < 1&& transform.position.y <_player.transform.position.y)
+            {
+                Instantiate(_laserUP, transform.position, Quaternion.identity);
+            }
+            else
+            {
+
+
+                Instantiate(_laser, transform.position, Quaternion.identity);
+                }
+            yield return new WaitForSeconds(Random.Range(0,2));
+
         }
+
     }
 }

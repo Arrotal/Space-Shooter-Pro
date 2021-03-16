@@ -8,7 +8,7 @@ public class EnemyLaserBehav : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.down * speed * Time.deltaTime);
-        if (transform.position.y < -6)
+        if (transform.position.y < -6 ||transform.position.y >7)
         {
             
             Destroy(this.gameObject);
