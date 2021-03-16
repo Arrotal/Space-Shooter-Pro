@@ -21,7 +21,7 @@ public class SpawnManager : MonoBehaviour
     {
         while (!_bossDead)
         {
-            yield return new WaitForSeconds(30f);
+            yield return new WaitForSeconds(1f);
 
             StartCoroutine(BossTime(_Boss));
         }
@@ -30,9 +30,10 @@ public class SpawnManager : MonoBehaviour
     IEnumerator BossTime(WaveManager boss)
     {
 
-        keepSpawning = false; 
+        keepSpawning = false;
         StopAllCoroutines();
-        StillSpawnPowerups();
+
+        spawningPowerUps = StartCoroutine(spawnPowerUps());
         GameObject bossEnemy = Instantiate(boss.GetEnemy(), new Vector3(0,9,0), Quaternion.identity);
         bossEnemy.GetComponent<BossMovement>().SetWaveManager(boss);
 
@@ -40,10 +41,7 @@ public class SpawnManager : MonoBehaviour
         StartSpawning();
 
     }
-    private void StillSpawnPowerups()
-    {
-        StartCoroutine("spawnPowerUps");
-    }
+   
     IEnumerator SpawnRoutineEnemy()
     {
         yield return new WaitForSeconds(2F);
@@ -61,7 +59,7 @@ public class SpawnManager : MonoBehaviour
     IEnumerator spawnPowerUps()
     {
         yield return new WaitForSeconds(2F);
-        while (keepSpawning)
+        while (true)
         {
             randomChance = Random.Range(0, 21);
             if(randomChance ==20)
