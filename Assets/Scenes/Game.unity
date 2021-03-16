@@ -242,8 +242,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a060079ad8368dd44b7b5a54eeeda4d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _waveManagement:
+  - {fileID: 11400000, guid: 3d173322bf762c743b587415fa4b12a3, type: 2}
+  - {fileID: 11400000, guid: b06e2cfe28a5e6f41b9239a28580ec23, type: 2}
   _enemy: {fileID: 248201644675667233, guid: ffac4e76d1b44d84ea2c076e4a1a54f5, type: 3}
   spawningContainer: {fileID: 1637315586}
+  _enemyLeft: {fileID: 248201644675667233, guid: 8264676fedb10564bb9c1daf7e4ce47e, type: 3}
+  _enemyRight: {fileID: 248201644675667233, guid: c56be06142c4ac44ca6e7be98b4562dd, type: 3}
   powerups:
   - {fileID: 1995171036140842058, guid: 870544d8836c0c54482630497dabe591, type: 3}
   - {fileID: 6712593565383626496, guid: 251bc84c1e3c3c748a7a8599fa481db1, type: 3}
@@ -1343,12 +1348,12 @@ GameObject:
   - component: {fileID: 1307718943}
   - component: {fileID: 1307718942}
   m_Layer: 0
-  m_Name: AmmoMax (1)
+  m_Name: Dash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1307718941
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2178,7 +2183,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2033869230
 RectTransform:
   m_ObjectHideFlags: 0

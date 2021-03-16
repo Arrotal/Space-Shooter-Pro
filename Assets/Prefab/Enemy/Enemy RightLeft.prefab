@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 8786406848203581394}
   - component: {fileID: 2067079991709089302}
   - component: {fileID: 1850909937929530088}
-  - component: {fileID: 5967741465497903206}
+  - component: {fileID: 2098410715234183644}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Enemy RightLeft
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
   _scoreValue: 15
   _laser: {fileID: 679596834881222652, guid: 0c9e5142ecff92c4f9800ad88cf2f5d9, type: 3}
   _explosion: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
-  _waypoints: {fileID: 0}
+  _waypoints: {fileID: 340809549290266936, guid: 73bca4fefb96702409c453e396de9774, type: 3}
 --- !u!61 &1610049215094250650
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -266,7 +266,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5967741465497903206
+--- !u!114 &2098410715234183644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

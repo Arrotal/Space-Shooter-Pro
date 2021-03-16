@@ -5,9 +5,10 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
 
-    [SerializeField] private GameObject _enemy, spawningContainer;
+    [SerializeField] private List<WaveManager> _waveManagement;
+    [SerializeField] private GameObject _enemy, spawningContainer, _enemyLeft, _enemyRight;
     [SerializeField] private GameObject[] powerups;
-    Coroutine spawningEnemy, spawningPowerUps;
+    Coroutine spawningEnemy, spawningPowerUps, spawningPathed, spawningRight;
     private bool keepSpawning = false;
     void Start()
     {
@@ -21,10 +22,8 @@ public class SpawnManager : MonoBehaviour
             
             GameObject newEnemy = Instantiate(_enemy, new Vector3(Random.Range(-7, 4), 9, 0), Quaternion.identity);
             GameObject newEnemy2 = Instantiate(_enemy, new Vector3(Random.Range(-9, 0), 8, 0), Quaternion.identity);
-            GameObject newEnemy3 = Instantiate(_enemy, new Vector3(Random.Range(-4,7),13,0), Quaternion.identity);
             newEnemy.transform.parent = spawningContainer.transform;
             newEnemy2.transform.parent = spawningContainer.transform;
-            newEnemy3.transform.parent = spawningContainer.transform;
             yield return new WaitForSeconds(3f);
         }
     }
@@ -47,9 +46,34 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    private IEnumerator SpawnAllEnemiesInWave(WaveManager waveManage)
+    {
+        for (int loop = 0; loop < waveManage.GetNumberOfEnemies(); loop++)
+        {
+            GameObject newEnemy = Instantiate(waveManage.GetEnemy(), waveManage.GetWaypoints()[0].position, Quaternion.identity);
+            newEnemy.GetComponent<EnemyMovement>().SetWaveManager(waveManage);
+            newEnemy.transform.parent = spawningContainer.transform;
+            yield return new WaitForSeconds(3f);
+        }
+    }
+    IEnumerator SpawningPathedEnemies()
+    {
+        for (int waveIndex = 0; waveIndex < _waveManagement.Count; waveIndex++)
+        {
+            var currentWave = _waveManagement[waveIndex];
+            yield return StartCoroutine(SpawnAllEnemiesInWave(currentWave));
+        }
+
+
+        
+    }
+
+    
     public void onPlayerDeath()
     {
         keepSpawning = false;
+
+        StopAllCoroutines();
         Destroy(spawningContainer);
     }
 
@@ -60,6 +84,8 @@ public class SpawnManager : MonoBehaviour
         spawningEnemy = StartCoroutine(SpawnRoutineEnemy());
 
         spawningPowerUps = StartCoroutine(spawnPowerUps());
+
+        spawningPathed = StartCoroutine(SpawningPathedEnemies());
     }
     public void SpawnExtraEnemy()
     {

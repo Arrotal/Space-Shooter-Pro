@@ -14,11 +14,14 @@ public class EnemyBehav : MonoBehaviour
     private SpawnManager _spawnManager;
     [SerializeField] private GameObject _laser;
     [SerializeField] private AudioClip _explosion;
+
+    [SerializeField]private GameObject _waypoints;
+    private int _waypointIndex = 0;
     private void Start()
     {
         SetupEnemy();
         StartCoroutine(FiringLaser());
-        
+        _waypointIndex = 0;
     }
 
     private void SetupEnemy()
@@ -50,10 +53,9 @@ public class EnemyBehav : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
-        if (transform.position.y < -5.5f&& !death)
+        if (transform.position.y < -5.5f && !death)
         {
-            transform.position = new Vector3(Random.Range(-9,9), 9, 0);
+            transform.position = new Vector3(Random.Range(-9, 9), 9, 0);
         }
     }
     private void OnTriggerEnter2D(Collider2D other)
