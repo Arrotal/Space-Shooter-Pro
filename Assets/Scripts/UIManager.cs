@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _gameOverContainer, _GameUIContainer;
-    [SerializeField] private Text _scoreText, _gameOverScore, _ammoAmount;
+    [SerializeField] private Text _scoreText, _gameOverScore, _ammoAmount,_ammoMax;
     [SerializeField] private Sprite[] _lives;
     [SerializeField] private Image _livesVisual;
     [SerializeField] private Slider _speedBoost;
@@ -48,6 +48,10 @@ public class UIManager : MonoBehaviour
     public void AmmoCount(int ammoIncoming)
     {
         _ammoAmount.text = ammoIncoming.ToString();
+    }
+    public void AmmoMax(int AmmoMaxIncoming)
+    {
+        _ammoMax.text = AmmoMaxIncoming.ToString();
     }
 
     public void SpeedBoostDuration(float SpeedBoost)

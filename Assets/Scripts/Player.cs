@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 10f;// _fireRate = 0.2f, _nextFire = -0.2f;
     [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield, _HomingShots;
     [SerializeField] private GameObject[] _fires;
-    private int _lives = 3, _shieldHits= 3, _ammo= 15,_fireActive;
+    private int _lives = 3, _shieldHits= 3, _ammo= 15, _ammoMax = 50,_fireActive;
     private Coroutine _firingCoroutine;
     private bool _alternativeFire;
     [SerializeField] private AudioClip _laser;
@@ -101,6 +101,7 @@ public class Player : MonoBehaviour
         CheckForNulls();
 
         _UIManager.AmmoCount(_ammo);
+        _UIManager.AmmoMax(_ammoMax);
         _audioSource.clip = _laser;
     }
 
@@ -443,7 +444,12 @@ public class Player : MonoBehaviour
     public void AmmoRefill()
     {
         _ammo += 15;
-
+        if (_ammo > _ammoMax)
+        {
+            _ammo = _ammoMax;
+            _score += 100;
+            _UIManager.AddScore(_score);
+        }
         _UIManager.AmmoCount(_ammo);
     }
 
