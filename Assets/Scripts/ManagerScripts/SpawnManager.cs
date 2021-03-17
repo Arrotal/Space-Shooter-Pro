@@ -7,7 +7,7 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] private List<WaveManager> _waveManagement;
     [SerializeField] private WaveManager _Boss;
-    [SerializeField] private GameObject _enemy, spawningContainer, _enemyLeft, _enemyRight;
+    [SerializeField] private GameObject _enemy, spawningContainer, _enemyLeft, _enemyRight,_enemyZoomer;
     [SerializeField] private GameObject[] powerups;
     [SerializeField] private int randomChance;
     Coroutine spawningEnemy, spawningPowerUps, spawningPathed, spawningRight;
@@ -47,7 +47,12 @@ public class SpawnManager : MonoBehaviour
         yield return new WaitForSeconds(2F);
         while (keepSpawning)
         {
-            
+            if (Random.Range(0, 5) == 0)
+            {
+
+                GameObject newZoomer = Instantiate(_enemyZoomer, new Vector3(Random.Range(-7, 4), 9, 0), Quaternion.identity);
+                newZoomer.transform.parent = spawningContainer.transform;
+            }
             GameObject newEnemy = Instantiate(_enemy, new Vector3(Random.Range(-7, 4), 9, 0), Quaternion.identity);
             GameObject newEnemy2 = Instantiate(_enemy, new Vector3(Random.Range(-9, 0), 8, 0), Quaternion.identity);
             newEnemy.transform.parent = spawningContainer.transform;

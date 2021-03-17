@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Wave4
   m_EditorClassIdentifier: 
   _enemy: {fileID: 248201644675667233, guid: ffac4e76d1b44d84ea2c076e4a1a54f5, type: 3}
-  _path: {fileID: 340809549290266936, guid: fa292a3b2ce29a54bae6e7256416392f, type: 3}
+  _path: {fileID: 340809549290266936, guid: 8efb8c7502032b04eac8dcea26619eae, type: 3}
   _numberOfEnemies: 4
   _moveSpeed: 3

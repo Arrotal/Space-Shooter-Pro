@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 8786406848203581394}
   - component: {fileID: 2067079991709089302}
   - component: {fileID: 1850909937929530088}
-  - component: {fileID: 2098410715234183644}
+  - component: {fileID: 5967741465497903206}
   m_Layer: 0
-  m_Name: Enemy RightLeft
+  m_Name: EnemyGoingToPlayer
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0}
   m_Children:
-  - {fileID: 2306645737837744786}
+  - {fileID: 1994039390141827096}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -50,13 +50,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b81e90657371e44fa000f5d3a098787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scoreValue: 50
+  _scoreValue: 15
   _laser: {fileID: 679596834881222652, guid: 0c9e5142ecff92c4f9800ad88cf2f5d9, type: 3}
   _laserUP: {fileID: 679596834881222652, guid: ad0f3dafb0d32bd419cc8e424bd32afe, type: 3}
-  _shield: {fileID: 3663841215582845502}
+  _shield: {fileID: 318175275300695763}
   _explosion: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
-  _health: 3
-  _enemyID: 1
+  _health: 5
+  _enemyID: 2
 --- !u!61 &1610049215094250650
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2098410715234183644
+--- !u!114 &5967741465497903206
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee0f85d8ebf03774fb4efd3a2aebbf1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &3663841215582845502
+--- !u!1 &318175275300695763
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -290,8 +290,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2306645737837744786}
-  - component: {fileID: 2626518899182209663}
+  - component: {fileID: 1994039390141827096}
+  - component: {fileID: 8800755646204855168}
   m_Layer: 0
   m_Name: Shields_00000
   m_TagString: Untagged
@@ -299,13 +299,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2306645737837744786
+--- !u!4 &1994039390141827096
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3663841215582845502}
+  m_GameObject: {fileID: 318175275300695763}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
@@ -313,13 +313,13 @@ Transform:
   m_Father: {fileID: 4281248355864997407}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2626518899182209663
+--- !u!212 &8800755646204855168
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3663841215582845502}
+  m_GameObject: {fileID: 318175275300695763}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0

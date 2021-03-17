@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed = 10f;// _fireRate = 0.2f, _nextFire = -0.2f;
     [SerializeField] private GameObject _projectile, _tripleShotProjectile, _playerShield, _HomingShots;
     [SerializeField] private GameObject[] _fires;
-    private int _lives = 3, _shieldHits= 3, _ammo= 15, _ammoMax = 50,_fireActive;
+    private int _lives = 3, _shieldHits= 3, _ammo= 150, _ammoMax = 500,_fireActive;
     private Coroutine _firingCoroutine;
     private bool _alternativeFire;
     [SerializeField] private AudioClip _laser;
@@ -278,7 +278,7 @@ public class Player : MonoBehaviour
                     _UIManager.AmmoCount(_ammo);
                 }
 
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.1f);
             }
             else if (!_alternativeFire)
             {
@@ -292,7 +292,7 @@ public class Player : MonoBehaviour
                     _UIManager.AmmoCount(_ammo);
                 }
 
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.1f);
             }
             
         }
@@ -392,6 +392,12 @@ public class Player : MonoBehaviour
     }
     public void EnableTripleShot()
     {
+        if (_HomingShotsEnabled)
+        { 
+            _HomingShotDuration = 0;
+
+            StartCoroutine("HomingShotPowerDown");
+        }
         StopCoroutine("TripleShotPowerDown");
         _tripleShotEnabled = true;
         _tripleShotDuration += 10f;
@@ -459,7 +465,7 @@ public class Player : MonoBehaviour
     }
     public void AmmoRefill()
     {
-        _ammo += 15;
+        _ammo += 150;
         if (_ammo > _ammoMax)
         {
             _ammo = _ammoMax;
@@ -499,6 +505,12 @@ public class Player : MonoBehaviour
     }
     public void HomingShot()
     {
+        if (_tripleShotEnabled)
+        {
+            _tripleShotDuration = 0;
+
+            StartCoroutine("TripleShotPowerDown");
+        }
         StopCoroutine("HomingShotPowerDown");
         _HomingShotsEnabled = true;
         _HomingShotDuration += 5f;

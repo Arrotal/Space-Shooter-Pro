@@ -15,6 +15,7 @@ public class EnemyBehav : MonoBehaviour
     [SerializeField] private GameObject _laser,_laserUP,_shield;
     [SerializeField] private AudioClip _explosion;
     [SerializeField] private int _health;
+    [SerializeField] private int _enemyID;
 
     private void Start()
     {
@@ -24,7 +25,7 @@ public class EnemyBehav : MonoBehaviour
 
     private void SetupEnemy()
     {
-        if (_health == 2)
+        if (_enemyID ==1)
         { _shield.SetActive(true); }
         _speed = Random.Range(2, 5);
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -50,21 +51,36 @@ public class EnemyBehav : MonoBehaviour
         }
         _audioSource.clip = _explosion;
     }
-
+    public int ReturnID()
+    {
+        return _enemyID;
+    }
     void Update()
     {
+
         if (transform.position.y < -5.5f && !death)
         {
-            transform.position = new Vector3(Random.Range(-9, 9), 9, 0);
+            if (_enemyID == 2)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+
+            {
+                transform.position = new Vector3(Random.Range(-9, 9), 9, 0);
+            }
         }
+       
+        
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Projectile" && _health > 1)
-        { _shield.SetActive(false);
+        if (other.tag == "Projectile" && _enemyID >0 && _health>0)
+        { 
+            _shield.SetActive(false);
             _health--;
         }
-        else if (_health <= 1 || _shield ==null ||other.tag == "Player"||other.tag =="BossLaser")
+        else if (_health <= 1 ||other.tag == "Player"||other.tag =="BossLaser")
         {
             if (other.tag == "Player")
             {
@@ -74,6 +90,8 @@ public class EnemyBehav : MonoBehaviour
                     player.TakeLives();
 
                 }
+                if (_shield != null)
+                { _shield.SetActive(false); }
                 _audioSource.Play();
                 _animator.SetTrigger("OnDeath");
                 Destroy(this.gameObject, 2.29f);

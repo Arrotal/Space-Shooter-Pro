@@ -16,25 +16,53 @@ public class TripleShotPowerUp : MonoBehaviour
     //6=*Negative*Overburn
     [SerializeField] private int powerUpID;
     [SerializeField]private AudioClip _audio;
+    private Player _player;
+    private Coroutine _suck;
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+        if (_player == null)
+        {
+            Debug.Log("Player is Missing");
+        }
+    }
     private void Update()
     {
         if (powerUpID < 3)
         {
             transform.Translate(Vector3.down * Time.deltaTime * _speed);
         }
-        if (powerUpID >=3)
+        if (powerUpID >= 3)
         {
             transform.Rotate(0, 0, 1, Space.World);
-            transform.Translate(new Vector3(0,-1,0) * Time.deltaTime * _speed,Space.World) ;
+            transform.Translate(new Vector3(0, -1, 0) * Time.deltaTime * _speed, Space.World);
         }
         if (transform.position.y < -5f)
         {
-            Destroy(this.gameObject);        
+            Destroy(this.gameObject);
         }
 
+        
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            _suck = StartCoroutine(SuckTowardsPlayer());
+
+        }
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            StopCoroutine(_suck);
+        }
 
     }
+    IEnumerator SuckTowardsPlayer()
+    {
+        while (true)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, Time.deltaTime);
 
+            yield return new WaitForSeconds(0);
+        }
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "BossLaser")
