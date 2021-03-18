@@ -74,6 +74,7 @@ public class Player : MonoBehaviour
 
     private void SetDefaults()
     {
+        StartCoroutine(WaitBetweenAmmo());
         _cameraShaking = false;
         _speedBoosting = false;
         _booster = false;
@@ -165,8 +166,20 @@ public class Player : MonoBehaviour
         WeaponTyping();
         Fire();
         SpeedBoost();
+        
     }
+    IEnumerator WaitBetweenAmmo()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(10f);
 
+            if (_ammo < 50)
+            {
+                _spawnManager.SpawnAmmo();
+            }
+        }
+    }
     private void SpeedBoost()
     {
         SpeedBoostCooldowns();

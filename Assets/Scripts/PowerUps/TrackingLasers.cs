@@ -36,7 +36,7 @@ public class TrackingLasers : MonoBehaviour
             GetTarget();
             if (_target == null)
             {
-                transform.Translate(Vector3.up * Time.deltaTime);
+                transform.Translate(Vector3.up * Time.deltaTime *2);
             }
         }
         else if (_target.transform.position.y < -5.4f)
@@ -45,8 +45,9 @@ public class TrackingLasers : MonoBehaviour
         }
         else
         {
-            transform.up = _target.transform.position - transform.position;
-            transform.position = Vector2.MoveTowards(transform.position, _target.transform.position, 2 * Time.deltaTime);
+            //transform.up = _target.transform.position - transform.position,Time.deltaTime;
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.FromToRotation(transform.position, _target.transform.position - transform.position), Time.deltaTime *2);
+            transform.Translate(Vector3.up * Time.deltaTime * 10);
 
         }
     }

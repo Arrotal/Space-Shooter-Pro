@@ -70,15 +70,33 @@ public class EnemyBehav : MonoBehaviour
                 transform.position = new Vector3(Random.Range(-9, 9), 9, 0);
             }
         }
+
+        //Attempt to avoid shot randomly
+        CheckYAxis();
+        //shoot pickup if within 2f on the Y axis
        
         
     }
+
+    private void CheckYAxis()
+    {
+        // check all projectiles and see if they are within ABS .5x and 2y if so add a small amount to randomly left or right to attempt to dodge
+        
+
+
+    }
+    public bool isDead()
+    { return death; }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Projectile" && _enemyID >0 && _health>0)
-        { 
-            _shield.SetActive(false);
-            _health--;
+        if (other.tag == "Projectile" && _health>0)
+        {
+            if (_shield != null)
+            {
+                _shield.SetActive(false);
+            }
+                _health--;
         }
         else if (_health <= 1 ||other.tag == "Player"||other.tag =="BossLaser")
         {

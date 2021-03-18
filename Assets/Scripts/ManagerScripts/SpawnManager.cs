@@ -11,7 +11,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject[] powerups;
     [SerializeField] private int randomChance;
     Coroutine spawningEnemy, spawningPowerUps, spawningPathed, spawningRight;
-    private bool keepSpawning = false, _bossDead;
+    private bool keepSpawning = false, _startSpawning = false, _bossDead;
     void Start()
     {
         _bossDead = false;
@@ -117,21 +117,37 @@ public class SpawnManager : MonoBehaviour
 
     public void StartSpawning()
     {
+        _startSpawning = true;
         StartCoroutine(Wait3Seconds());
-        
     }
+
+    private void StartSpawningEnemies()
+    {
+        if (_startSpawning)
+        {
+            spawningEnemy = StartCoroutine(SpawnRoutineEnemy());
+            StartCoroutine(TimeUntilBoss());
+            _bossDead = false;
+            spawningPowerUps = StartCoroutine(spawnPowerUps());
+            spawningPathed = StartCoroutine(SpawningPathedEnemies());
+        }
+    }
+
     IEnumerator Wait3Seconds()
     {
-        yield return new WaitForSeconds(3f);
-        StartCoroutine(TimeUntilBoss());
-        _bossDead = false;
-        keepSpawning = true;
-        spawningEnemy = StartCoroutine(SpawnRoutineEnemy());
+        while (true)
+        {
 
-        spawningPowerUps = StartCoroutine(spawnPowerUps());
+            yield return new WaitForSeconds(3f);
+            
 
-        spawningPathed = StartCoroutine(SpawningPathedEnemies());
+            StartSpawningEnemies();
+            _startSpawning = false;
+        }
     }
+
+   
+
     public void SpawnExtraEnemy()
     {
         GameObject newEnemy = Instantiate(_enemy, new Vector3(Random.Range(-7, 4), 9, 0), Quaternion.identity);
@@ -144,6 +160,10 @@ public class SpawnManager : MonoBehaviour
         powerUp.transform.parent = spawningContainer.transform;
 
     }
-   
+
+    public void SpawnAmmo()
+    {
+        GameObject powerUp = Instantiate(powerups[3], new Vector3(Random.Range(-9, 9), 9, 0), Quaternion.identity);
+    }
 
 }

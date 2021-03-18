@@ -55,7 +55,7 @@ MonoBehaviour:
   _laserUP: {fileID: 679596834881222652, guid: ad0f3dafb0d32bd419cc8e424bd32afe, type: 3}
   _shield: {fileID: 3663841215582845502}
   _explosion: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
-  _health: 3
+  _health: 2
   _enemyID: 1
 --- !u!61 &1610049215094250650
 BoxCollider2D:

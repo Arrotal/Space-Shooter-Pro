@@ -9,6 +9,7 @@ public class EnemyMovement : MonoBehaviour
     private int waypointIndex = 0, _speed;
     private EnemyBehav _enemyBehav;
     private Player _player;
+    private bool isDead;
     private void Start()
     {
         
@@ -17,7 +18,7 @@ public class EnemyMovement : MonoBehaviour
        
             _player = GameObject.Find("Player").GetComponent<Player>();
         
-        if (_waveManagement)
+        if (_waveManagement&&!isDead)
         {
             _speed = _waveManagement.GetmoveSpeed();
             _waypoints = _waveManagement.GetWaypoints();
@@ -31,6 +32,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
+        AmIDead();
         if (_player == null)
         {
             Destroy(this.gameObject);
@@ -38,6 +40,10 @@ public class EnemyMovement : MonoBehaviour
         }
         Move();
         
+    }
+    private void AmIDead()
+    {
+        isDead = _enemyBehav.isDead();
     }
 
     public void SetWaveManager(WaveManager _waveManag)

@@ -69,6 +69,11 @@ public class TripleShotPowerUp : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        if (other.tag == "EnemyProjectile")
+        {
+            Destroy(this.gameObject);
+            Destroy(other.gameObject);
+        }
         if (other.tag == "Player")
         {
             
