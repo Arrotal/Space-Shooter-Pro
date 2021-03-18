@@ -32,6 +32,8 @@ public class WeaponStats
 
 public class Player : MonoBehaviour
 {
+    public delegate void PlayerXPos(float yPos);
+    public static event PlayerXPos playerShoots;
     //Player Camera
     [SerializeField] private Camera _mainCamera;
     private bool _cameraShaking;
@@ -267,8 +269,13 @@ public class Player : MonoBehaviour
 
         while (true)
         {
+            if (playerShoots != null)
+            {
+                playerShoots(transform.position.x);
+            }
             if (_tripleShotEnabled)
             {
+                
                 Instantiate(_tripleShotProjectile, transform.position, Quaternion.identity);
                 yield return new WaitForSeconds(0.1f);
                 _audioSource.Play();

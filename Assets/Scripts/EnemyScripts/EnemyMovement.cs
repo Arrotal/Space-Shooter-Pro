@@ -9,16 +9,17 @@ public class EnemyMovement : MonoBehaviour
     private int waypointIndex = 0, _speed;
     private EnemyBehav _enemyBehav;
     private Player _player;
-    private bool isDead;
+    private bool _isDead, _attemptedDodge;
+    private float randomXFloat=0;
     private void Start()
     {
-        
+        _attemptedDodge = false;
         _enemyBehav = GetComponent<EnemyBehav>();
-        
-       
+
+        Player.playerShoots += AttemptToAvoid;
             _player = GameObject.Find("Player").GetComponent<Player>();
         
-        if (_waveManagement&&!isDead)
+        if (_waveManagement&&!_isDead)
         {
             _speed = _waveManagement.GetmoveSpeed();
             _waypoints = _waveManagement.GetWaypoints();
@@ -28,6 +29,18 @@ public class EnemyMovement : MonoBehaviour
         {
             _speed = Random.Range(2, 5);
         }
+    }
+    private void AttemptToAvoid(float PlayerPOS)
+    {
+        if (Mathf.Abs(PlayerPOS - transform.position.x) >= 0.5f && !_attemptedDodge && transform.position.y<=2)
+        {
+            randomXFloat = Random.Range(-3, 4);
+        }
+        else if (Mathf.Abs(PlayerPOS - transform.position.x) <= 0.5f)
+        {
+            randomXFloat = 0;
+        }
+
     }
 
     private void Update()
@@ -39,18 +52,21 @@ public class EnemyMovement : MonoBehaviour
 
         }
         Move();
-        
+       
     }
     private void AmIDead()
     {
-        isDead = _enemyBehav.isDead();
+        _isDead = _enemyBehav.isDead();
     }
 
     public void SetWaveManager(WaveManager _waveManag)
     {
         this._waveManagement = _waveManag;
     }
-
+    private void OnDisable()
+    {
+        Player.playerShoots -= AttemptToAvoid;
+    }
     private void Move()
     {
         if (_enemyBehav.ReturnID() == 2 && transform.position.y > _player.transform.position.y)
@@ -59,7 +75,7 @@ public class EnemyMovement : MonoBehaviour
         }
         else if (_waypoints == null)
         {
-            transform.Translate(Vector3.down * _speed * Time.deltaTime);
+            transform.Translate(new Vector3(randomXFloat,-1,0) * _speed * Time.deltaTime);
 
         } 
         else

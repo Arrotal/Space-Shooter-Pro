@@ -71,19 +71,6 @@ public class EnemyBehav : MonoBehaviour
             }
         }
 
-        //Attempt to avoid shot randomly
-        CheckYAxis();
-        //shoot pickup if within 2f on the Y axis
-       
-        
-    }
-
-    private void CheckYAxis()
-    {
-        // check all projectiles and see if they are within ABS .5x and 2y if so add a small amount to randomly left or right to attempt to dodge
-        
-
-
     }
     public bool isDead()
     { return death; }
